@@ -30,14 +30,14 @@ function reset_game()
    for p=1, #objects.player do
       local player = objects.player[p]
       player.body:setPosition( --> reset player position
-      player.pos[1] * 0.01 * window_width,
-      player.pos[2] * 0.01 * window_height
-   )
-   player.body:setLinearVelocity(0,0)
-   player.body:setAngularVelocity(set.angular_velocity)
-   set_force( )
-   player.lose = ""
-end
+         player.pos[1] * 0.01 * window_width,
+         player.pos[2] * 0.01 * window_height
+      )
+      player.body:setLinearVelocity(0,0)
+      player.body:setAngularVelocity(set.angular_velocity)
+      set_force( )
+      player.lose = ""
+   end
 end
 
 function love.load()
@@ -62,18 +62,18 @@ function love.load()
    for p=1, #objects.player, 1 do
       local player = objects.player[p]
       player.body = love.physics.newBody(
-      world,
-      player.pos[1]*0.01*window_width,
-      player.pos[2]*0.01*window_height,
-      "dynamic"
-   )
-   player.body:setAngularVelocity( set.angular_velocity )
-   player.lose = ""
-   if player.shape.shape == "rect" then
-      player.shape = love.physics.newRectangleShape(0,0,set.rectangle[1],set.rectangle[2])
+         world,
+         player.pos[1]*0.01*window_width,
+         player.pos[2]*0.01*window_height,
+         "dynamic"
+      )
+      player.body:setAngularVelocity( set.angular_velocity )
+      player.lose = ""
+      if player.shape.shape == "rect" then
+         player.shape = love.physics.newRectangleShape(0,0,set.rectangle[1],set.rectangle[2])
+      end
+      player.fixture = love.physics.newFixture(player.body, player.shape, 5)
    end
-   player.fixture = love.physics.newFixture(player.body, player.shape, 5)
-end
 end
 
 function love.draw()
@@ -132,17 +132,24 @@ function love.update(dt)
    world:update(dt)
 
    for _, player in ipairs(objects.player) do
-      if love.keyboard.isDown(player.keys[1]) then player.body:applyForce(0, -set.now_force[1]) end
-      if love.keyboard.isDown(player.keys[2]) then player.body:applyForce(0, set.now_force[2]) end
-      if love.keyboard.isDown(player.keys[3]) then player.body:applyForce(set.now_force[3], 0) end
-      if love.keyboard.isDown(player.keys[4]) then player.body:applyForce(-set.now_force[4], 0) end
+      forces = {
+         {0,                 -set.now_force[1]},
+         {0,                 set.now_force[2]},
+         {set.now_force[3],  0},
+         {-set.now_force[4], 0},
+      }
+      for direction = 1, 4 do
+         if love.keyboard.isDown(player.keys[direction]) then
+            player.body:applyForce(forces[direction][1], forces[direction][2])
+         end
+      end
    end
 
-   if love.keyboard.isDown( "escape" ) then
+   if love.keyboard.isDown("escape") then
       love.event.quit()
    end
 
-   set_force( )
+   set_force()
 end
 
 function love.keypressed(key)
