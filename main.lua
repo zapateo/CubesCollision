@@ -30,8 +30,8 @@ function reset()
   for p=1, #objects.player do
     local player = objects.player[p]
     player.body:setPosition( --> reset player position
-      player.pos[1]*0.01*window_width,
-      player.pos[2]*0.01*window_height
+      player.pos[1] * 0.01 * window_width,
+      player.pos[2] * 0.01 * window_height
     )
     player.body:setLinearVelocity(0,0)
     player.body:setAngularVelocity(set.angular_velocity)
@@ -139,16 +139,20 @@ function love.update(dt)
   end
 
   if love.keyboard.isDown( "escape" ) then
-    love.event.quit( )
+    love.event.quit()
   end
 
   set_force( )
 end
 
 function love.keypressed(key)
-  -- FIXME: convert into a table
-  if key == "f5" then set.stars = not set.stars end
-  if key == "f6" then set.angular_velocity = 0 end
-  if key == "f7" then set.help = not set.help end
-  if key == "f12"then reset( ) end
+  local functions = {
+    ["f5"] = function() set.stars = not set.stars end,
+    ["f6"] = function() set.angular_velocity = 0 end,
+    ["f7"] = function() set.help = not set.help end,
+    ["f12"] = reset,
+  }
+  if functions[key] then
+    functions[key]()
+  end
 end
