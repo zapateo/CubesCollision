@@ -7,10 +7,10 @@ function set_force()
 end
 
 function print_help()
-   local text = "F5 show/hide stars\n"
-   text=text.."F6 disable cubes rotation\n"
-   text=text.."F7 show/hide help message\n"
-   text=text.."F12 reset game\n"
+   local text =   "F5 show/hide stars\n"
+   text = text .. "F6 disable cubes rotation\n"
+   text = text .. "F7 show/hide help message\n"
+   text = text .. "F12 reset game\n"
    love.graphics.setColor(200,200,200,200)
    love.graphics.print(text, 100, 100)
 end
