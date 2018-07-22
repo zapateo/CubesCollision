@@ -18,7 +18,7 @@ set.margin = {100,100}
 set.rectangle = {40,40}
 
 -- Imposta la velocita' di rotazione iniziale
-set.angular_velocity = 10
+set.angular_velocity = 0
 
 -- Imposta la spinta iniziale sui vari assi
 set.force = {400, 400, 400, 400}
