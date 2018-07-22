@@ -25,7 +25,7 @@ function draw_stars(number)
    end
 end
 
-function reset()
+function reset_game()
    print(set.force[1])
    for p=1, #objects.player do
       local player = objects.player[p]
@@ -84,10 +84,10 @@ function love.draw()
 
    for p=1, #objects.player, 1 do
       love.graphics.setColor(
-      objects.player[p].color[1],
-      objects.player[p].color[2],
-      objects.player[p].color[3]
-   )
+         objects.player[p].color[1],
+         objects.player[p].color[2],
+         objects.player[p].color[3]
+      )
    love.graphics.polygon("fill", objects.player[p].body:getWorldPoints(objects.player[p].shape:getPoints()))
 
    local info = {} --> infos about current player
@@ -110,32 +110,32 @@ function love.draw()
    end
 
    love.graphics.print(
-   info.name.."\t\tPos: "..info.pos.x..", "..info.pos.y.." ("..info.keys.." )"..info.lose,
-   0, 12*(p-1)
-)
-end
-love.graphics.setColor(255,255,255)
-love.graphics.print("Gravity: "..set.gravity[1]..", "..set.gravity[2], 0, #objects.player*12)
-love.graphics.print("Force:   "..math.floor(set.now_force[1])..", "..math.floor(set.now_force[2])..", "..math.floor(set.now_force[3])..", "..math.floor(set.now_force[4]), 0, (#objects.player+1)*12)
-if set.stars then
-   love.graphics.print("Stars:   "..set.stars_number, 0, (#objects.player+2)*12)
-end
+      info.name.."\t\tPos: "..info.pos.x..", "..info.pos.y.." ("..info.keys.." )"..info.lose,
+      0, 12*(p-1)
+   )
+   end
+   love.graphics.setColor(255,255,255)
+   love.graphics.print("Gravity: "..set.gravity[1]..", "..set.gravity[2], 0, #objects.player*12)
+   love.graphics.print("Force:   "..math.floor(set.now_force[1])..", "..math.floor(set.now_force[2])..", "..math.floor(set.now_force[3])..", "..math.floor(set.now_force[4]), 0, (#objects.player+1)*12)
+   if set.stars then
+      love.graphics.print("Stars:   "..set.stars_number, 0, (#objects.player+2)*12)
+   end
 
-if set.help then
-   print_help( )
-end
+   if set.help then
+      print_help( )
+   end
 
-love.graphics.print("Mondini Gianluca - 2014", window_width-170, window_height-15)
+   love.graphics.print("Gianluca Mondini - 2018", window_width-170, window_height-15)
 end
 
 function love.update(dt)
    world:update(dt)
 
-   for p = 1, #objects.player, 1 do
-      if love.keyboard.isDown(objects.player[p].keys[1]) then objects.player[p].body:applyForce(0, -set.now_force[1]) end
-      if love.keyboard.isDown(objects.player[p].keys[2]) then objects.player[p].body:applyForce(0, set.now_force[2]) end
-      if love.keyboard.isDown(objects.player[p].keys[3]) then objects.player[p].body:applyForce(set.now_force[3], 0) end
-      if love.keyboard.isDown(objects.player[p].keys[4]) then objects.player[p].body:applyForce(-set.now_force[4], 0) end
+   for _, player in ipairs(objects.player) do
+      if love.keyboard.isDown(player.keys[1]) then player.body:applyForce(0, -set.now_force[1]) end
+      if love.keyboard.isDown(player.keys[2]) then player.body:applyForce(0, set.now_force[2]) end
+      if love.keyboard.isDown(player.keys[3]) then player.body:applyForce(set.now_force[3], 0) end
+      if love.keyboard.isDown(player.keys[4]) then player.body:applyForce(-set.now_force[4], 0) end
    end
 
    if love.keyboard.isDown( "escape" ) then
@@ -150,7 +150,7 @@ function love.keypressed(key)
       ["f5"] = function() set.stars = not set.stars end,
       ["f6"] = function() set.angular_velocity = 0 end,
       ["f7"] = function() set.help = not set.help end,
-      ["f12"] = reset,
+      ["f12"] = reset_game,
    }
    if functions[key] then
       functions[key]()
