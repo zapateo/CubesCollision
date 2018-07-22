@@ -35,7 +35,7 @@ function reset_game()
       )
       player.body:setLinearVelocity(0,0)
       player.body:setAngularVelocity(set.angular_velocity)
-      set_force( )
+      set_force()
       player.lose = ""
    end
 end
@@ -88,31 +88,31 @@ function love.draw()
          objects.player[p].color[2],
          objects.player[p].color[3]
       )
-   love.graphics.polygon("fill", objects.player[p].body:getWorldPoints(objects.player[p].shape:getPoints()))
+      love.graphics.polygon("fill", objects.player[p].body:getWorldPoints(objects.player[p].shape:getPoints()))
 
-   local info = {} --> infos about current player
-   info.pos = {}
-   info.pos.x, info.pos.y = objects.player[p].body:getWorldCenter()
-   if info.pos.x > window_width  or info.pos.x < 0  or info.pos.y > window_height or info.pos.y < 0 then
-      if objects.player[p].lose == "" then
-         local death_time = love.timer.getTime( )
-         objects.player[p].lose = " ha perso a "..death_time
+      local info = {} --> infos about current player
+      info.pos = {}
+      info.pos.x, info.pos.y = objects.player[p].body:getWorldCenter()
+      if info.pos.x > window_width  or info.pos.x < 0  or info.pos.y > window_height or info.pos.y < 0 then
+         if objects.player[p].lose == "" then
+            local death_time = love.timer.getTime( )
+            objects.player[p].lose = " ha perso a "..death_time
+         end
       end
-   end
 
-   info.pos.x, info.pos.y = math.floor(info.pos.x), math.floor(info.pos.y)
-   info.name = objects.player[p].name
-   info.lose = objects.player[p].lose
-   info.keys = ""
+      info.pos.x, info.pos.y = math.floor(info.pos.x), math.floor(info.pos.y)
+      info.name = objects.player[p].name
+      info.lose = objects.player[p].lose
+      info.keys = ""
 
-   for k=1, 4, 1 do
-      info.keys = info.keys.." "..string.upper(objects.player[p].keys[k])
-   end
+      for k=1, 4, 1 do
+         info.keys = info.keys.." "..string.upper(objects.player[p].keys[k])
+      end
 
-   love.graphics.print(
-      info.name.."\t\tPos: "..info.pos.x..", "..info.pos.y.." ("..info.keys.." )"..info.lose,
-      0, 12*(p-1)
-   )
+      love.graphics.print(
+         info.name.."\t\tPos: "..info.pos.x..", "..info.pos.y.." ("..info.keys.." )"..info.lose,
+         0, 12*(p-1)
+      )
    end
    love.graphics.setColor(255,255,255)
    love.graphics.print("Gravity: "..set.gravity[1]..", "..set.gravity[2], 0, #objects.player*12)
